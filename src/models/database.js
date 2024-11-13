@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import { MongoClient } from "mongodb";
 
 let singleton;
@@ -19,5 +17,34 @@ async function connect() {
 
   return singleton;
 }
+
+const database = async () => {
+  const db = await connect();
+  await db.createCollection("users", {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["username", "email", "password"],
+        properties: {
+          username: {
+            bsonType: "string",
+            minLength: 3,
+          },
+          email: {
+            bsonType: "string",
+            pattern: "^.+@.+..+$",
+          },
+          password: {
+            bsonType: "string",
+            minLength: 8,
+          },
+        },
+      },
+    },
+  });
+  const usersCollection = db.collection("users");
+  await usersCollection.createIndex({ email: 1 }, { unique: true });
+};
+database();
 
 export { connect };
