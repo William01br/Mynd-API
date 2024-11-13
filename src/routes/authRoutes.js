@@ -1,12 +1,13 @@
 import express from "express";
-import { register } from "../controllers/authControllers.js";
+import { register, login, remove } from "../controllers/authControllers.js";
+import authenticateToken from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.post("/register", register);
 
-router.post("/login");
+router.post("/login", login);
 
-router.post("/remove");
+router.delete("/remove", authenticateToken, remove);
 
 export default router;

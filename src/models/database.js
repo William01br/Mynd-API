@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import { ObjectId } from "mongodb";
 
 let singleton;
 
@@ -66,4 +67,33 @@ async function insertUser(username, email, password) {
   }
 }
 
-export { connect, insertUser };
+async function findUser(email) {
+  try {
+    const db = await connect();
+    const usersCollection = db.collection("users");
+
+    const user = await usersCollection.find({ email: email });
+    // console.log(user);
+
+    return user;
+  } catch (err) {
+    console.error("Error finding user: ", err);
+  }
+}
+
+async function removeUser(id) {
+  try {
+    const db = await connect();
+    const usersCollection = db.collection("users");
+
+    const documentDeleted = await usersCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    return documentDeleted.deletedCount;
+  } catch (err) {
+    console.error("Error finding user: ", err);
+  }
+}
+
+export { connect, insertUser, findUser, removeUser };
