@@ -47,4 +47,23 @@ const database = async () => {
 };
 database();
 
-export { connect };
+async function insertUser(username, email, password) {
+  try {
+    const db = await connect();
+    const usersCollection = db.collection("users");
+
+    await usersCollection.insertOne({
+      username: username,
+      email: email,
+      password: password,
+    });
+
+    // criar um middleware para verificar se já existe um email igual ao fornecido.
+
+    return { sucess: true };
+  } catch (err) {
+    console.error("Error inserting user: ", err);
+  }
+}
+
+export { connect, insertUser };
