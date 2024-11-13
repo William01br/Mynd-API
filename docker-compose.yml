@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root # Usuário administrador
+      MONGO_INITDB_ROOT_PASSWORD: root # Senha do administrador
+    ports:
+      - "27017:27017" # Porta padrão do MongoDB
+    volumes:
+      - mongodb_data:/data/db # Volume para persistência de dados
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root # Usuário administrador do MongoDB
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root # Senha do administrador
+      ME_CONFIG_MONGODB_SERVER: mongodb # Nome do serviço MongoDB
+    ports:
+      - "8081:8081" # Porta para acesso ao Mongo Express
+
+volumes:
+  mongodb_data:
