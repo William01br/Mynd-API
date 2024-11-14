@@ -9,9 +9,14 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await insertUser(username, email, hashedPassword);
 
+    if (result === 11000)
+      return res.status(400).json({ message: "Email already registered" });
+
     if (!result)
       return res.status(500).json({ message: "Error inserting user" });
-    return res.status(201).json({ message: "Sucessfully added" });
+    // return res.status(201).json({ message: "Sucessfully added" });
+    res.status(201);
+    return res.render("login");
   } catch (err) {
     res
       .status(500)
@@ -21,6 +26,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
+  // console.log(email, password);
 
   try {
     const cursor = await findUser(email);
@@ -36,7 +42,11 @@ const login = async (req, res) => {
     const token = jwt.sign({ userId: user[0]._id }, process.env.SECRET_KEY, {
       expiresIn: "1h",
     });
-    res.status(200).json({ token: token, message: "Login successful" });
+    // res.status(200).json({ token: token, message: "Login successful" });
+    // console.log(token);
+    res.status(200);
+    return token;
+    // return res.render("afterLogin");
   } catch (err) {
     res.status(500).json({ error: err.message, message: "Error logging in" });
   }
@@ -44,15 +54,14 @@ const login = async (req, res) => {
 
 const remove = async (req, res) => {
   const id = req.user.userId;
-  console.log(id);
 
   try {
     const result = await removeUser(id);
-    console.log(result);
 
     if (result === 0)
       return res.status(404).json({ message: "user not removed" });
-    return res.status(204);
+    res.status(204);
+    return res.render("accountDeleted");
   } catch (err) {
     res
       .status(500)

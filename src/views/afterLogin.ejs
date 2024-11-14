@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Thanks for login with us</h1>
+    <input type="submit" id="delAccount" value="Delete Account" />
+    <script>
+      const token = localStorage.getItem("jwtToken");
+
+      document
+        .getElementById("delAccount")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const response = await fetch("/api/remove", {
+            method: "DELETE",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          });
+
+          const data = await response.json();
+
+          if (response.ok) return console.log(data);
+        });
+    </script>
+  </body>
+</html>

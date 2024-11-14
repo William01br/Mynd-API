@@ -59,10 +59,10 @@ async function insertUser(username, email, password) {
       password: password,
     });
 
-    // criar um middleware para verificar se já existe um email igual ao fornecido.
-
     return { sucess: true };
   } catch (err) {
+    // código 11000 se refere a chave duplicada no Banco que deveria ser única
+    if (err.code === 11000) return 11000;
     console.error("Error inserting user: ", err);
   }
 }
@@ -73,7 +73,6 @@ async function findUser(email) {
     const usersCollection = db.collection("users");
 
     const user = await usersCollection.find({ email: email });
-    // console.log(user);
 
     return user;
   } catch (err) {
