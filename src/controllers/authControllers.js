@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { insertUser, findUser, removeUser } from "../models/database.js";
+import { insertUser, findUser, removeUser } from "../models/User.js";
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -14,9 +14,7 @@ const register = async (req, res) => {
 
     if (!result)
       return res.status(500).json({ message: "Error inserting user" });
-    // return res.status(201).json({ message: "Sucessfully added" });
-    res.status(201);
-    return res.render("login");
+    return res.status(201).json({ message: "Sucessfully added" });
   } catch (err) {
     res
       .status(500)
@@ -26,7 +24,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  // console.log(email, password);
+  console.log(email, password);
 
   try {
     const cursor = await findUser(email);
@@ -42,11 +40,10 @@ const login = async (req, res) => {
     const token = jwt.sign({ userId: user[0]._id }, process.env.SECRET_KEY, {
       expiresIn: "1h",
     });
-    // res.status(200).json({ token: token, message: "Login successful" });
-    // console.log(token);
-    res.status(200);
-    return token;
-    // return res.render("afterLogin");
+    console.log(token);
+
+    res.cookie("jwtToken", token, { httpOnly: true });
+    return res.status(200).json({ message: "Login successful", token: token });
   } catch (err) {
     res.status(500).json({ error: err.message, message: "Error logging in" });
   }
@@ -54,16 +51,16 @@ const login = async (req, res) => {
 
 const remove = async (req, res) => {
   const id = req.user.userId;
+  console.log(id);
 
   try {
     const result = await removeUser(id);
 
     if (result === 0)
       return res.status(404).json({ message: "user not removed" });
-    res.status(204);
-    return res.render("accountDeleted");
+    return res.status(200).json({ message: "User removed successfully" });
   } catch (err) {
-    res
+    return res
       .status(500)
       .json({ message: "Error removing user", error: err.message });
   }

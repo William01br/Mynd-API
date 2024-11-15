@@ -1,20 +1,15 @@
 import jwt from "jsonwebtoken";
 
 const authenticateToken = (req, res, next) => {
-  const token = req.header("authorization");
-  if (!token) return res.status(401).json({ message: "Acess denied" });
+  const token = req.cookies.jwtToken;
+  if (!token) return res.redirect("/login");
 
-  try {
-    const verified = jwt.verify(token, process.env.SECRET_KEY);
-    req.user = verified;
+  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+    if (err) return res.redirect("/login");
+    req.user = user;
+    console.log(req.user.userId);
     next();
-  } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Intern error server", error: err.message });
-  }
+  });
 };
 
 export default authenticateToken;
-
-// middleware para caminhos NOT FOUND
