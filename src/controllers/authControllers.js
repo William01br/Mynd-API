@@ -28,7 +28,6 @@ const login = async (req, res) => {
 
   try {
     const user = await findUser(email);
-    // const user = await cursor.toArray();
 
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
@@ -41,7 +40,7 @@ const login = async (req, res) => {
     });
     console.log(token);
 
-    res.cookie("jwtToken", token, { httpOnly: true });
+    // res.cookie("jwtToken", token, { httpOnly: true });
     return res.status(200).json({ message: "Login successful", token: token });
   } catch (err) {
     res.status(500).json({ error: err.message, message: "Error logging in" });
