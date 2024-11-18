@@ -1,5 +1,4 @@
 import express from "express";
-import { connect } from "./database.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import { notFound } from "./src/middlewares/notFound.js";
 const app = express();

@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const connect = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(`${process.env.MONGODB_URI}?authSource=admin`);
+
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
@@ -11,11 +12,3 @@ const connect = async () => {
 };
 
 export default connect;
-
-async function insertUser(username, email, password) {}
-
-async function findUser(email) {}
-
-async function removeUser(id) {}
-
-export { connect, insertUser, findUser, removeUser };
