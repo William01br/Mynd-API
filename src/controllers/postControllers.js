@@ -1,6 +1,23 @@
-import { insertPost } from "../models/Post.js";
+import {
+  getAllPosts,
+  insertPost,
+  updateDbPost,
+  deleteDbPost,
+} from "../models/Post.js";
 
-const allPosts = async (req, res) => {};
+const allPosts = async (req, res) => {
+  const id = req.user.userId;
+  if (!id) return res.status(500).json({ error: "Id not found or invalid" });
+
+  try {
+    const result = await getAllPosts(id);
+    if (!result)
+      return res.status(500).json({ error: "Error retrieving posts" });
+    return res.status(200).json(result);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
 
 const addPost = async (req, res) => {
   const { title, description } = req.body;
@@ -20,4 +37,44 @@ const addPost = async (req, res) => {
   }
 };
 
-export { allPosts, addPost };
+const updatePost = async (req, res) => {
+  const titleId = req.params.title;
+  const { title, description } = req.body;
+
+  const updateData = { title: title, description: description };
+  const sanitizedData = Object.fromEntries(
+    Object.entries(updateData).filter(([_, value]) => value !== null)
+  );
+
+  try {
+    const result = await updateDbPost(sanitizedData, titleId);
+
+    if (result.matchedCount === 0)
+      return res
+        .status(400)
+        .json({ message: `There are no posts with this title '${titleId}'` });
+
+    if (!result.acknowledged)
+      return res
+        .status(500)
+        .json({ message: "This post could not be updated" });
+    return res.status(200).json({ message: "Post updated successfully" });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+const deletePost = async (req, res) => {
+  const titleId = req.params.title;
+
+  try {
+    const postDeleted = await deleteDbPost(titleId);
+    if (postDeleted === 0)
+      return res.status(400).json({ message: "Post not found" });
+    return res.status(200).json({ message: "Post deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export { allPosts, addPost, updatePost, deletePost };
