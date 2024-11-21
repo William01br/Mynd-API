@@ -11,8 +11,8 @@ const allPosts = async (req, res) => {
 
   try {
     const result = await getAllPosts(id);
-    if (!result)
-      return res.status(500).json({ error: "Error retrieving posts" });
+    if (result.length === 0)
+      return res.status(500).json({ message: "There are no Posts" });
     return res.status(200).json(result);
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -38,7 +38,7 @@ const addPost = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
-  const titleId = req.params.title;
+  const id = req.params.id;
   const { title, description } = req.body;
 
   const updateData = { title: title, description: description };
@@ -47,12 +47,12 @@ const updatePost = async (req, res) => {
   );
 
   try {
-    const result = await updateDbPost(sanitizedData, titleId);
+    const result = await updateDbPost(sanitizedData, id);
 
     if (result.matchedCount === 0)
       return res
         .status(400)
-        .json({ message: `There are no posts with this title '${titleId}'` });
+        .json({ message: `There are no posts with this title '${id}'` });
 
     if (!result.acknowledged)
       return res
@@ -65,10 +65,10 @@ const updatePost = async (req, res) => {
 };
 
 const deletePost = async (req, res) => {
-  const titleId = req.params.title;
+  const id = req.params.id;
 
   try {
-    const postDeleted = await deleteDbPost(titleId);
+    const postDeleted = await deleteDbPost(id);
     if (postDeleted === 0)
       return res.status(400).json({ message: "Post not found" });
     return res.status(200).json({ message: "Post deleted successfully" });

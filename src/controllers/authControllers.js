@@ -1,13 +1,38 @@
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { insertUser, findUser, removeUser } from "../models/User.js";
+import {
+  insertUser,
+  findById,
+  findByCredentials,
+  removeUser,
+  showUsers,
+} from "../models/User.js";
 
-const register = async (req, res) => {
-  const { username, email, password } = req.body;
+const showAllUsers = async (req, res) => {
+  try {
+    const users = await showUsers();
+    if (users.length === 0)
+      return res.status(404).json({ message: "There are no users" });
+    return res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const showUser = async (req, res) => {
+  const id = req.params.id;
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await insertUser(username, email, hashedPassword);
+    const user = await findById(id);
+    if (!user) return res.status(400).json({ message: "Id not found" });
+    return res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const register = async (req, res) => {
+  try {
+    const result = await insertUser(req.credentials);
 
     if (result === 11000)
       return res.status(400).json({ message: "Email already registered" });
@@ -26,22 +51,19 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   console.log(email, password);
 
+  if (!email || !password)
+    return res.status(400).json({ error: "Enter all the information" });
+
   try {
-    const user = await findUser(email);
+    const user = await findByCredentials(email, password);
 
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch)
-      return res.status(401).json({ message: "Invalid credentials" });
 
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
       expiresIn: "1h",
     });
-    console.log(token);
 
-    // res.cookie("jwtToken", token, { httpOnly: true });
-    return res.status(200).json({ message: "Login successful", token: token });
+    return res.status(200).json({ token: token, user });
   } catch (err) {
     res.status(500).json({ error: err.message, message: "Error logging in" });
   }
@@ -65,4 +87,4 @@ const remove = async (req, res) => {
   }
 };
 
-export { register, login, remove };
+export { showAllUsers, showUser, register, login, remove };
