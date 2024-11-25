@@ -11,14 +11,20 @@ const authenticateToken = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const verified = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-    if (!verified)
-      return res.status(403).json({ message: "Invalid token or expired" });
+    if (!decoded) return res.status(403).json({ message: "Invalid token" });
 
-    req.user = verified;
+    req.user = decoded;
     next();
   } catch (err) {
+    if (err.name === "TokenExpiredError")
+      return res
+        .status(401)
+        .json({ message: "Token expired", expiredAt: err.expiredAt });
+
+    if (err.name === "JsonWebTokenError")
+      return res.status(401).json({ message: "Invalid signature" });
     return res.status(500).json({ message: err.message });
   }
 };
