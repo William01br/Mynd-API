@@ -1,4 +1,4 @@
-import { isEmailValid, isPasswordValid } from "../services/credentials.js";
+import { isEmailValid, isPasswordValid } from "../utils/credentials.js";
 
 export const credentialsIsValid = (req, res, next) => {
   const { username, email, password } = req.body;

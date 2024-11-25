@@ -1,13 +1,8 @@
-import {
-  insertUser,
-  findById,
-  removeUser,
-  findAllUsers,
-} from "../models/User.js";
+import * as userService from "../services/userService.js";
 
 const showUsers = async (req, res) => {
   try {
-    const users = await findAllUsers();
+    const users = await userService.showUsers();
     if (users.length === 0)
       return res.status(404).json({ message: "There are no users" });
     return res.status(200).json(users);
@@ -20,7 +15,7 @@ const showUser = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const user = await findById(id);
+    const user = await userService.showUser(id);
     if (!user) return res.status(400).json({ message: "Id not found" });
     return res.status(200).json(user);
   } catch (err) {
@@ -30,7 +25,7 @@ const showUser = async (req, res) => {
 
 const register = async (req, res) => {
   try {
-    const result = await insertUser(req.credentials);
+    const result = await userService.register(req.credentials);
 
     if (result === 11000)
       return res.status(400).json({ message: "Email already registered" });
@@ -50,7 +45,7 @@ const remove = async (req, res) => {
   console.log(id);
 
   try {
-    const result = await removeUser(id);
+    const result = await userService.remove(id);
     console.log(result);
 
     if (result === 0)

@@ -42,16 +42,8 @@ async function findByCredentials(email, password) {
     const user = await User.findOne({ email: emailLower }).select("+password");
     console.log(user.email);
     console.log(user.password);
-    if (!user) return null;
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return null;
-
-    // return user without password
-    const userData = { ...user.toObject() };
-    delete userData.password;
-
-    return userData;
+    return user;
   } catch (err) {
     console.error("Error finding user by credentials in DB:", err);
   }

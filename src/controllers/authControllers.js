@@ -1,21 +1,18 @@
-import jwt from "jsonwebtoken";
-import { findByCredentials } from "../models/User.js";
+import * as authServices from "../services/authServices.js";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
+  // console.log(email, password);
 
   if (!email || !password)
     return res.status(400).json({ error: "Enter all the information" });
 
   try {
-    const user = await findByCredentials(email, password);
+    const user = await authServices.login(email, password);
 
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    const token = authServices.generateToken();
     console.log(token);
     return res.status(200).json({ user });
   } catch (err) {
