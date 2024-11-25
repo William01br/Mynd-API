@@ -1,4 +1,4 @@
-import * as authServices from "../services/authServices.js";
+import authServices from "../services/authServices.js";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -12,9 +12,9 @@ export const login = async (req, res) => {
 
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
-    const token = authServices.generateToken();
+    const token = authServices.generateToken(user.id);
     console.log(token);
-    return res.status(200).json({ user });
+    return res.status(200).json({ token: token });
   } catch (err) {
     res.status(500).json({ error: err.message, message: "Error logging in" });
   }

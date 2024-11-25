@@ -1,18 +1,18 @@
 import express from "express";
 import {
-  showUsers,
+  getUsers,
+  getUser,
   register,
   remove,
-  showUser,
 } from "../controllers/userControllers.js";
 import authenticateToken from "../middlewares/authMiddleware.js";
 import { credentialsIsValid } from "../middlewares/credentialsMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", showUsers);
+router.get("/", getUsers);
 
-router.get("/:id", showUser);
+router.get("/:id", getUser);
 
 router.post("/register", credentialsIsValid, register);
 

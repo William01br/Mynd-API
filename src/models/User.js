@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true },
+    name: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true, select: false },
   },
@@ -36,7 +37,7 @@ async function findById(id) {
   }
 }
 
-async function findByCredentials(email, password) {
+async function findByCredentials(email) {
   try {
     const emailLower = email.toLowerCase();
     const user = await User.findOne({ email: emailLower }).select("+password");

@@ -5,20 +5,12 @@ import {
   findAllUsers,
 } from "../models/User.js";
 
-const showUsers = async () => {
-  return await findAllUsers();
-};
+const showUsers = async () => await findAllUsers();
 
-const showUser = async (id) => {
-  return await findById(id);
-};
+const showUser = async (id) => await findById(id);
 
-const register = async (credentials) => {
-  return await insertUser(credentials);
-};
+const register = async (credentials) => await insertUser(credentials);
 
-const remove = async (id) => {
-  return await removeUser(id);
-};
+const remove = async (id) => await removeUser(id);
 
-export { showUsers, showUser, register, remove };
+export default { showUsers, showUser, register, remove };

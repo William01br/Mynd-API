@@ -4,13 +4,20 @@ const postSchema = new mongoose.Schema(
   {
     title: { type: "string", required: true },
     description: { type: "string", required: true },
-    author_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    author_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      require: true,
+    },
+    likes: { type: Array, required: true },
+    comments: { type: Array, required: true },
   },
   { timestamps: true }
 );
 
 const Post = mongoose.model("Post", postSchema);
 
+// criar uma função para pesquisar através do título do post igual o reddit
 async function getAllPosts(author_id) {
   try {
     const posts = await Post.find({ author_id });
@@ -34,7 +41,7 @@ async function insertPost(title, description, author_id) {
   }
 }
 
-async function updateDbPost(data, id) {
+async function updatePost(data, id) {
   try {
     const update = await Post.updateOne({ _id: id }, { $set: data });
     return update;
@@ -43,7 +50,7 @@ async function updateDbPost(data, id) {
   }
 }
 
-async function deleteDbPost(id) {
+async function deletePost(id) {
   try {
     const result = await Post.deleteOne({ _id: id });
     return result.deletedCount;
@@ -52,4 +59,4 @@ async function deleteDbPost(id) {
   }
 }
 
-export { getAllPosts, insertPost, updateDbPost, deleteDbPost };
+export { getAllPosts, insertPost, updatePost, deletePost };

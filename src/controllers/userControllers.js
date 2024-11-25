@@ -1,6 +1,6 @@
-import * as userService from "../services/userService.js";
+import userService from "../services/userService.js";
 
-const showUsers = async (req, res) => {
+const getUsers = async (req, res) => {
   try {
     const users = await userService.showUsers();
     if (users.length === 0)
@@ -11,7 +11,7 @@ const showUsers = async (req, res) => {
   }
 };
 
-const showUser = async (req, res) => {
+const getUser = async (req, res) => {
   const id = req.params.id;
 
   try {
@@ -58,4 +58,4 @@ const remove = async (req, res) => {
   }
 };
 
-export { showUsers, showUser, register, remove };
+export { getUsers, getUser, register, remove };

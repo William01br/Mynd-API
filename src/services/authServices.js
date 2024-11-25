@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { findByCredentials } from "../models/User.js";
 
 const login = async (email, password) => {
-  const user = await findByCredentials(email, password);
+  const user = await findByCredentials(email);
 
   if (!user) return null;
 
@@ -16,11 +16,11 @@ const login = async (email, password) => {
 
   return userData;
 };
-const generateToken = () => {
-  const token = jwt.sign({ userId: login._id }, process.env.SECRET_KEY, {
+const generateToken = (id) => {
+  const token = jwt.sign({ userId: id }, process.env.SECRET_KEY, {
     expiresIn: "1h",
   });
   return token;
 };
 
-export { login, generateToken };
+export default { login, generateToken };

@@ -1,30 +1,25 @@
 import {
   getAllPosts,
   insertPost,
-  updateDbPost,
-  deleteDbPost,
+  updatePost,
+  deletePost,
 } from "../models/Post.js";
 
-const allPosts = async (id) => {
-  return await getAllPosts(id);
-};
+const getPosts = async (id) => await getAllPosts(id);
 
-const addPost = async (title, description, id) => {
-  return await insertPost(title, description, id);
-};
+const create = async (title, description, id) =>
+  await insertPost(title, description, id);
 
-const updatePost = async (title, description, id) => {
+const update = async (title, description, id) => {
   const updateData = { title: title, description: description };
 
   const sanitizedData = Object.fromEntries(
     Object.entries(updateData).filter(([_, value]) => value !== null)
   );
 
-  return await updateDbPost(sanitizedData, id);
+  return await updatePost(sanitizedData, id);
 };
 
-const deletePost = async (id) => {
-  return await deleteDbPost(id);
-};
+const remove = async (id) => await deletePost(id);
 
-export { allPosts, addPost, updatePost, deletePost };
+export default { getPosts, create, update, remove };
