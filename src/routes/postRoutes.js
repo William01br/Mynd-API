@@ -8,12 +8,12 @@ import {
 
 const router = express.Router();
 
-router.get("/posts", allPosts);
+router.get("/", allPosts);
 
-router.post("/post", addPost);
+router.post("/add", addPost);
 
-router.patch("/post/:id", updatePost);
+router.patch("/:id", updatePost);
 
-router.delete("/post/:id", deletePost);
+router.delete("/:id", deletePost);
 
 export default router;

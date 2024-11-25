@@ -1,53 +1,7 @@
 import jwt from "jsonwebtoken";
-import {
-  insertUser,
-  findById,
-  findByCredentials,
-  removeUser,
-  showUsers,
-} from "../models/User.js";
+import { findByCredentials } from "../models/User.js";
 
-const showAllUsers = async (req, res) => {
-  try {
-    const users = await showUsers();
-    if (users.length === 0)
-      return res.status(404).json({ message: "There are no users" });
-    return res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-const showUser = async (req, res) => {
-  const id = req.params.id;
-
-  try {
-    const user = await findById(id);
-    if (!user) return res.status(400).json({ message: "Id not found" });
-    return res.status(200).json(user);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-const register = async (req, res) => {
-  try {
-    const result = await insertUser(req.credentials);
-
-    if (result === 11000)
-      return res.status(400).json({ message: "Email already registered" });
-
-    if (!result)
-      return res.status(500).json({ message: "Error inserting user" });
-    return res.status(201).json({ message: "Sucessfully added" });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ error: err.message, message: "Error registering user" });
-  }
-};
-
-const login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
   console.log(email, password);
 
@@ -62,29 +16,9 @@ const login = async (req, res) => {
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
       expiresIn: "1h",
     });
-
-    return res.status(200).json({ token: token, user });
+    console.log(token);
+    return res.status(200).json({ user });
   } catch (err) {
     res.status(500).json({ error: err.message, message: "Error logging in" });
   }
 };
-
-const remove = async (req, res) => {
-  const id = req.user.userId;
-  console.log(id);
-
-  try {
-    const result = await removeUser(id);
-    console.log(result);
-
-    if (result === 0)
-      return res.status(404).json({ message: "user not removed" });
-    return res.status(200).json({ message: "User successfully removed" });
-  } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Error removing user", error: err.message });
-  }
-};
-
-export { showAllUsers, showUser, register, login, remove };

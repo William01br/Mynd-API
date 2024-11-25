@@ -17,7 +17,7 @@ userSchema.pre("save", async function (next) {
 
 const User = mongoose.model("User", userSchema);
 
-async function showUsers() {
+async function findAllUsers() {
   try {
     const users = await User.find({});
     return users;
@@ -36,6 +36,27 @@ async function findById(id) {
   }
 }
 
+async function findByCredentials(email, password) {
+  try {
+    const emailLower = email.toLowerCase();
+    const user = await User.findOne({ email: emailLower }).select("+password");
+    console.log(user.email);
+    console.log(user.password);
+    if (!user) return null;
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return null;
+
+    // return user without password
+    const userData = { ...user.toObject() };
+    delete userData.password;
+
+    return userData;
+  } catch (err) {
+    console.error("Error finding user by credentials in DB:", err);
+  }
+}
+
 async function insertUser(username, email, password) {
   try {
     const newUser = new User({
@@ -51,21 +72,6 @@ async function insertUser(username, email, password) {
   }
 }
 
-async function findByCredentials(email, password) {
-  try {
-    email.toLowerCase();
-    const user = await User.findOne({ email });
-    if (!user) return null;
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return null;
-
-    return user;
-  } catch (err) {
-    console.error("Error finding user by credentials in DB:", err);
-  }
-}
-
 async function removeUser(id) {
   try {
     const user = await User.deleteOne({ _id: ObjectId(id) });
@@ -75,4 +81,4 @@ async function removeUser(id) {
   }
 }
 
-export { findByCredentials, showUsers, findById, insertUser, removeUser };
+export { findByCredentials, findAllUsers, findById, insertUser, removeUser };
