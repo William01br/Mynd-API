@@ -5,10 +5,11 @@ import {
   update,
   remove,
 } from "../controllers/postControllers.js";
+import { getAllDataPagination } from "../middlewares/paginationMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", getPosts);
+router.get("/", getAllDataPagination, getPosts);
 
 router.post("/", create);
 

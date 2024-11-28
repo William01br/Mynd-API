@@ -1,14 +1,30 @@
 import postServices from "../services/postServices.js";
 
 const getPosts = async (req, res) => {
-  const id = req.user.userId;
-  if (!id) return res.status(500).json({ error: "Id not found or invalid" });
-
   try {
-    const result = await postServices.getPosts(id);
+    const { nextUrl, previousUrl, limit, offset } = req.dataPagination;
+
+    const result = await postServices.getPosts(limit, offset);
+
     if (result.length === 0)
-      return res.status(500).json({ message: "There are no Posts" });
-    return res.status(200).json(result);
+      return res.status(200).json({ message: "There are no Posts" });
+
+    return res.status(200).json({
+      nextUrl: nextUrl,
+      previousUrl: previousUrl,
+      limit: limit,
+      offset: offset,
+      results: result.map((item) => ({
+        id: item._id,
+        title: item.title,
+        description: item.description,
+        likes: item.likes,
+        comments: item.comments,
+        username: item.author_id.username,
+        createdAt: item.author_id.createdAt,
+        updatedAt: item.author_id.updatedAt,
+      })),
+    });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -16,7 +32,7 @@ const getPosts = async (req, res) => {
 
 const create = async (req, res) => {
   const { title, description } = req.body;
-  const id = req.user.userId;
+  const id = req.userId;
 
   if (!id) return res.status(500).json({ error: "Id not found or invalid" });
 

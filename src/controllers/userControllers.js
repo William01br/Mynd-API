@@ -41,12 +41,10 @@ const register = async (req, res) => {
 };
 
 const remove = async (req, res) => {
-  const id = req.user.userId;
-  console.log(id);
+  const id = req.userId;
 
   try {
     const result = await userService.remove(id);
-    console.log(result);
 
     if (result === 0)
       return res.status(404).json({ message: "user not removed" });

@@ -18,12 +18,26 @@ const postSchema = new mongoose.Schema(
 const Post = mongoose.model("Post", postSchema);
 
 // criar uma função para pesquisar através do título do post igual o reddit
-async function getAllPosts(author_id) {
+
+async function getAllPosts(limit, offset) {
   try {
-    const posts = await Post.find({ author_id });
+    const posts = await Post.find()
+      .sort({ _id: -1 })
+      .skip(offset)
+      .limit(limit)
+      .populate("author_id");
     return posts;
   } catch (err) {
     console.error("Error retrieving posts from MongoDB:", err);
+  }
+}
+
+async function countAllPosts() {
+  try {
+    const result = await Post.countDocuments();
+    return result;
+  } catch (err) {
+    console.error("Error counting posts in MongoDB:", err);
   }
 }
 
@@ -59,4 +73,4 @@ async function deletePost(id) {
   }
 }
 
-export { getAllPosts, insertPost, updatePost, deletePost };
+export { getAllPosts, countAllPosts, insertPost, updatePost, deletePost };

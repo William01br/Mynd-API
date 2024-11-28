@@ -15,7 +15,7 @@ const authenticateToken = (req, res, next) => {
 
     if (!decoded) return res.status(403).json({ message: "Invalid token" });
 
-    req.user = decoded;
+    req.userId = decoded.userId;
     next();
   } catch (err) {
     if (err.name === "TokenExpiredError")
