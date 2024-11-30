@@ -1,4 +1,5 @@
 import express from "express";
+import authenticateToken from "../middlewares/authMiddleware.js";
 import {
   getPosts,
   getPost,
@@ -13,14 +14,14 @@ const router = express.Router();
 
 router.get("/", getAllDataPagination, getPosts);
 
-router.post("/", create);
+router.post("/", authenticateToken, create);
 
-router.get("/:id", getPost);
+router.get("/search", getAllDataPagination, getPostByTitle);
 
-router.get("/search/:title", getAllDataPagination, getPostByTitle);
+router.get("/:id", authenticateToken, getPost);
 
-router.patch("/:id", update);
+router.patch("/:id", authenticateToken, update);
 
-router.delete("/:id", remove);
+router.delete("/:id", authenticateToken, remove);
 
 export default router;

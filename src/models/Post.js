@@ -50,11 +50,12 @@ async function findPostById(id) {
   }
 }
 
-async function findPostByTitle(titleRegex, limit, offset) {
+async function findPostByTitle(title, limit, offset) {
   try {
     const result = await Post.find({
-      title: { $regex: titleRegex, $options: "i" },
+      title: { $regex: `^${title}`, $options: "i" },
     })
+      .sort({ _id: -1 })
       .skip(offset)
       .limit(limit)
       .populate("author_id");

@@ -12,11 +12,8 @@ const getPosts = async (limit, offset) => await getAllPosts(limit, offset);
 
 const getPost = async (id) => await findPostById(id);
 
-const getPostByTitle = async (title, limit, offset) => {
-  const titleRegex = `^${title}`;
-
-  return await findPostByTitle(titleRegex, limit, offset);
-};
+const getPostByTitle = async (title, limit, offset) =>
+  await findPostByTitle(title, limit, offset);
 
 const countPosts = async () => await countAllPosts();
 

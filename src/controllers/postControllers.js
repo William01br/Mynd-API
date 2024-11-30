@@ -56,8 +56,7 @@ const getPost = async (req, res) => {
 };
 
 const getPostByTitle = async (req, res) => {
-  const title = req.params.title;
-  const { nextUrl, previousUrl, limit, offset } = req.dataPagination;
+  const { nextUrl, previousUrl, limit, offset, title } = req.dataPagination;
 
   try {
     const result = await postServices.getPostByTitle(title, limit, offset);
