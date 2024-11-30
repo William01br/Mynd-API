@@ -41,6 +41,15 @@ async function countAllPosts() {
   }
 }
 
+async function findPostById(id) {
+  try {
+    const result = await Post.findById({ _id: id }).populate("author_id");
+    return result;
+  } catch (err) {
+    console.error("Error finding post in MongoDB:", err);
+  }
+}
+
 async function insertPost(title, description, author_id) {
   try {
     const newPost = new Post({
@@ -73,4 +82,11 @@ async function deletePost(id) {
   }
 }
 
-export { getAllPosts, countAllPosts, insertPost, updatePost, deletePost };
+export {
+  getAllPosts,
+  countAllPosts,
+  findPostById,
+  insertPost,
+  updatePost,
+  deletePost,
+};

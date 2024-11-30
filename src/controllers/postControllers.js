@@ -5,6 +5,7 @@ const getPosts = async (req, res) => {
     const { nextUrl, previousUrl, limit, offset } = req.dataPagination;
 
     const result = await postServices.getPosts(limit, offset);
+    console.log(result);
 
     if (result.length === 0)
       return res.status(200).json({ message: "There are no Posts" });
@@ -20,10 +21,34 @@ const getPosts = async (req, res) => {
         description: item.description,
         likes: item.likes,
         comments: item.comments,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
         username: item.author_id.username,
-        createdAt: item.author_id.createdAt,
-        updatedAt: item.author_id.updatedAt,
       })),
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+const getPost = async (req, res) => {
+  const postId = req.params.id;
+  console.log(postId);
+  try {
+    const result = await postServices.getPost(postId);
+    if (!result) return res.status(404).json({ message: "Post not found" });
+
+    return res.status(200).json({
+      result: {
+        id: result._id,
+        title: result.title,
+        description: result.description,
+        likes: result.likes,
+        comments: result.comments,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+        username: result.author_id.username,
+      },
     });
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -83,4 +108,4 @@ const remove = async (req, res) => {
   }
 };
 
-export { getPosts, create, update, remove };
+export { getPosts, getPost, create, update, remove };

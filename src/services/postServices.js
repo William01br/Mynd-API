@@ -1,5 +1,6 @@
 import {
   getAllPosts,
+  findPostById,
   insertPost,
   updatePost,
   deletePost,
@@ -7,6 +8,8 @@ import {
 } from "../models/Post.js";
 
 const getPosts = async (limit, offset) => await getAllPosts(limit, offset);
+
+const getPost = async (id) => await findPostById(id);
 
 const countPosts = async () => await countAllPosts();
 
@@ -25,4 +28,4 @@ const update = async (title, description, id) => {
 
 const remove = async (id) => await deletePost(id);
 
-export default { getPosts, countPosts, create, update, remove };
+export default { getPosts, getPost, countPosts, create, update, remove };
