@@ -2,6 +2,7 @@ import express from "express";
 import {
   getPosts,
   getPost,
+  getPostByTitle,
   create,
   update,
   remove,
@@ -15,6 +16,8 @@ router.get("/", getAllDataPagination, getPosts);
 router.post("/", create);
 
 router.get("/:id", getPost);
+
+router.get("/search/:title", getAllDataPagination, getPostByTitle);
 
 router.patch("/:id", update);
 

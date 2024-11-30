@@ -1,4 +1,5 @@
 import postServices from "../services/postServices.js";
+import { sliceString } from "../utils/sliceUtils.js";
 
 export const getAllDataPagination = async (req, res, next) => {
   let { limit, offset } = req.query;
@@ -8,7 +9,8 @@ export const getAllDataPagination = async (req, res, next) => {
 
   try {
     const amount = await postServices.countPosts();
-    const currentUrl = req.baseUrl;
+    // const currentUrl = req.baseUrl;
+    const currentUrl = sliceString(req.originalUrl);
 
     const nextTotal = limit + offset;
     const nextUrl =

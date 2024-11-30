@@ -55,6 +55,42 @@ const getPost = async (req, res) => {
   }
 };
 
+const getPostByTitle = async (req, res) => {
+  const title = req.params.title;
+  const { nextUrl, previousUrl, limit, offset } = req.dataPagination;
+
+  try {
+    const result = await postServices.getPostByTitle(title, limit, offset);
+    // console.log(result);
+
+    if (result.length === 0)
+      return res
+        .status(200)
+        .json({ message: "There are no Posts with this title" });
+
+    if (!result) return res.status(404).json({ message: "Post not found" });
+
+    return res.status(200).json({
+      nextUrl: nextUrl,
+      previousUrl: previousUrl,
+      limit: limit,
+      offset: offset,
+      results: result.map((item) => ({
+        id: item._id,
+        title: item.title,
+        description: item.description,
+        likes: item.likes,
+        comments: item.comments,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+        username: item.author_id.username,
+      })),
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
 const create = async (req, res) => {
   const { title, description } = req.body;
   const id = req.userId;
@@ -108,4 +144,4 @@ const remove = async (req, res) => {
   }
 };
 
-export { getPosts, getPost, create, update, remove };
+export { getPosts, getPost, getPostByTitle, create, update, remove };

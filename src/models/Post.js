@@ -50,6 +50,20 @@ async function findPostById(id) {
   }
 }
 
+async function findPostByTitle(titleRegex, limit, offset) {
+  try {
+    const result = await Post.find({
+      title: { $regex: titleRegex, $options: "i" },
+    })
+      .skip(offset)
+      .limit(limit)
+      .populate("author_id");
+    return result;
+  } catch (err) {
+    console.error("Error finding post by title in MongoDB:", err);
+  }
+}
+
 async function insertPost(title, description, author_id) {
   try {
     const newPost = new Post({
@@ -86,6 +100,7 @@ export {
   getAllPosts,
   countAllPosts,
   findPostById,
+  findPostByTitle,
   insertPost,
   updatePost,
   deletePost,
