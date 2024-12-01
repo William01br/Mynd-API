@@ -17,8 +17,6 @@ const postSchema = new mongoose.Schema(
 
 const Post = mongoose.model("Post", postSchema);
 
-// criar uma função para pesquisar através do título do post igual o reddit
-
 async function getAllPosts(limit, offset) {
   try {
     const posts = await Post.find()
@@ -32,12 +30,24 @@ async function getAllPosts(limit, offset) {
   }
 }
 
-async function countAllPosts() {
+// recebe um objeto vazio ou userId.
+async function countAllPosts(filter) {
   try {
-    const result = await Post.countDocuments();
+    const result = await Post.countDocuments(filter);
     return result;
   } catch (err) {
     console.error("Error counting posts in MongoDB:", err);
+  }
+}
+
+async function countAllPostsByTitle(title) {
+  try {
+    const result = await Post.countDocuments({
+      title: { $regex: `^${title}`, $options: "i" },
+    });
+    return result;
+  } catch (err) {
+    console.error("Error counting posts by title in MongoDB:", err);
   }
 }
 
@@ -47,6 +57,19 @@ async function findPostById(id) {
     return result;
   } catch (err) {
     console.error("Error finding post in MongoDB:", err);
+  }
+}
+
+async function findPostsByUserId(user_id, limit, offset) {
+  try {
+    const result = await Post.find({ author_id: user_id })
+      .sort({ _id: -1 })
+      .skip(offset)
+      .limit(limit)
+      .populate("author_id");
+    return result;
+  } catch (err) {
+    console.error("Error finding posts by user in MongoDB:", err);
   }
 }
 
@@ -105,4 +128,6 @@ export {
   insertPost,
   updatePost,
   deletePost,
+  findPostsByUserId,
+  countAllPostsByTitle,
 };
