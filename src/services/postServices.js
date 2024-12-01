@@ -47,6 +47,12 @@ const update = async (title, description, id) => {
 
 const remove = async (id) => await deletePost(id);
 
+const actionIsValid = async (postId, userId) => {
+  const result = await getPostsByUserId(userId);
+
+  return result.some((post) => post._id === postId);
+};
+
 export default {
   getPosts,
   getPost,
@@ -56,4 +62,5 @@ export default {
   create,
   update,
   remove,
+  actionIsValid,
 };

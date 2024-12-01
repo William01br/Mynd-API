@@ -61,7 +61,7 @@ const getPostsUser = async (req, res) => {
 
   try {
     const result = await postServices.getPostsByUserId(user_id, limit, offset);
-    // console.log(result);
+    console.log(result);
     if (result.length === 0)
       return res.status(404).json({ message: `This user don't have posts` });
 
@@ -142,11 +142,20 @@ const create = async (req, res) => {
   }
 };
 
+// atualiza o post pelo ID do post.
 const update = async (req, res) => {
   const id = req.params.id;
   const { title, description } = req.body;
+  const userId = req.userId;
 
   try {
+    const actionIsValid = await postServices.actionIsValid(id, userId);
+
+    if (!actionIsValid)
+      return res.status(403).json({
+        message: "The user don't have permission to update this post",
+      });
+
     const result = await postServices.update(title, description, id);
 
     if (result.matchedCount === 0)
@@ -166,8 +175,16 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   const id = req.params.id;
+  const userId = req.userId;
 
   try {
+    const actionIsValid = await postServices.actionIsValid(id, userId);
+
+    if (!actionIsValid)
+      return res.status(403).json({
+        message: "The user don't have permission to remove this post",
+      });
+
     const postDeleted = await postServices.remove(id);
     if (postDeleted === 0)
       return res.status(400).json({ message: "Post not found" });

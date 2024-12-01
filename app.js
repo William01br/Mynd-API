@@ -2,7 +2,7 @@ import express from "express";
 import authRoutes from "./src/routes/authRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import postRoutes from "./src/routes/postRoutes.js";
-import { notFound } from "./src/middlewares/notFound.js";
+import { notFound } from "./src/middlewares/notFoundMiddleware.js";
 const app = express();
 
 app.use(express.json());
