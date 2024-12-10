@@ -211,6 +211,24 @@ const likePost = async (req, res) => {
   }
 };
 
+const createComment = async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.userId;
+  const { comment } = req.body;
+
+  if (!comment)
+    return res.status(400).json({ message: "Write a message to comment!" });
+
+  try {
+    const result = await postServices.createComment(postId, userId, comment);
+
+    if (!result) return res.status(400).json({ message: "null" });
+    return res.status(201).json({ message: "Comment added successfully" });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
 export {
   getPosts,
   getPost,
@@ -220,4 +238,5 @@ export {
   update,
   remove,
   likePost,
+  createComment,
 };

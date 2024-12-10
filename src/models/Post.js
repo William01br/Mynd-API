@@ -144,6 +144,24 @@ async function removeLike(postId, userId) {
   }
 }
 
+async function insertComment(postId, userId, comment, commentId) {
+  console.log(postId, typeof postId);
+  try {
+    const result = await Post.findOneAndUpdate(
+      { _id: postId },
+      {
+        $push: {
+          comments: { commentId, userId, comment, createdAt: new Date() },
+        },
+      }
+    );
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.error("Error inserting comment on MongoDB:", err);
+  }
+}
+
 export {
   getAllPosts,
   countAllPosts,
@@ -156,4 +174,5 @@ export {
   countAllPostsByTitle,
   addLike,
   removeLike,
+  insertComment,
 };

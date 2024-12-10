@@ -10,6 +10,7 @@ import {
   countAllPostsByTitle,
   addLike,
   removeLike,
+  insertComment,
 } from "../models/Post.js";
 
 const getPosts = async (limit, offset) => await getAllPosts(limit, offset);
@@ -61,6 +62,11 @@ const addLikePost = async (postId, userId) => await addLike(postId, userId);
 const removeLikePost = async (postId, userId) =>
   await removeLike(postId, userId);
 
+const createComment = async (postId, userId, comment) => {
+  const commentId = Math.floor(Date.now() * Math.random()).toString(36);
+  return await insertComment(postId, userId, comment, commentId);
+};
+
 export default {
   getPosts,
   getPost,
@@ -73,4 +79,5 @@ export default {
   actionIsValid,
   addLikePost,
   removeLikePost,
+  createComment,
 };
