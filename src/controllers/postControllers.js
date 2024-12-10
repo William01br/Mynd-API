@@ -229,6 +229,30 @@ const createComment = async (req, res) => {
   }
 };
 
+const removeComment = async (req, res) => {
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const userId = req.userId;
+
+  try {
+    const actionIsValid = await postServices.actionIsValid(postId, userId);
+
+    if (!actionIsValid)
+      return res.status(403).json({
+        message: "The user don't have permission to remove this comment",
+      });
+
+    const result = await postServices.removeComment(postId, commentId);
+
+    if (result.deletedCount === 0)
+      return res.status(400).json({ message: "Comment not found" });
+
+    return res.status(200).json({ message: "Comment deleted successfully" });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
 export {
   getPosts,
   getPost,
@@ -239,4 +263,5 @@ export {
   remove,
   likePost,
   createComment,
+  removeComment,
 };

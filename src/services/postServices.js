@@ -11,6 +11,7 @@ import {
   addLike,
   removeLike,
   insertComment,
+  deleteComment,
 } from "../models/Post.js";
 
 const getPosts = async (limit, offset) => await getAllPosts(limit, offset);
@@ -67,6 +68,9 @@ const createComment = async (postId, userId, comment) => {
   return await insertComment(postId, userId, comment, commentId);
 };
 
+const removeComment = async (postId, commentId) =>
+  await deleteComment(postId, commentId);
+
 export default {
   getPosts,
   getPost,
@@ -80,4 +84,5 @@ export default {
   addLikePost,
   removeLikePost,
   createComment,
+  removeComment,
 };

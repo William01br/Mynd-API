@@ -10,6 +10,7 @@ import {
   remove,
   likePost,
   createComment,
+  removeComment,
 } from "../controllers/postControllers.js";
 import { getAllDataPagination } from "../middlewares/postsPaginationMiddleware.js";
 import { getDataUserPostsPagination } from "../middlewares/userPostsPaginationMiddleware.js";
@@ -34,5 +35,7 @@ router.patch("/:id", authenticateToken, update);
 router.patch("/like/:id", authenticateToken, likePost);
 
 router.delete("/:id", authenticateToken, remove);
+
+router.delete("/:id/comments/:commentId", authenticateToken, removeComment);
 
 export default router;

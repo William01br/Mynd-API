@@ -162,6 +162,24 @@ async function insertComment(postId, userId, comment, commentId) {
   }
 }
 
+async function deleteComment(postId, commentId) {
+  try {
+    const result = await Post.findOneAndUpdate(
+      {
+        _id: postId,
+      },
+      {
+        $pull: {
+          comments: { commentId },
+        },
+      }
+    );
+    return result;
+  } catch (err) {
+    console.error("Error deleting comment on MongoDB");
+  }
+}
+
 export {
   getAllPosts,
   countAllPosts,
@@ -175,4 +193,5 @@ export {
   addLike,
   removeLike,
   insertComment,
+  deleteComment,
 };
