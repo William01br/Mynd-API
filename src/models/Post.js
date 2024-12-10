@@ -120,6 +120,30 @@ async function deletePost(id) {
   }
 }
 
+async function addLike(postId, userId) {
+  try {
+    const result = await Post.findOneAndUpdate(
+      { _id: postId, "likes.userId": { $nin: [userId] } },
+      { $push: { likes: { userId, created: new Date() } } }
+    );
+    return result;
+  } catch (err) {
+    console.error("Error adding like in post on MongoDB:", err);
+  }
+}
+
+async function removeLike(postId, userId) {
+  try {
+    const result = await Post.findOneAndUpdate(
+      { _id: postId },
+      { $pull: { likes: { userId } } }
+    );
+    return result;
+  } catch (err) {
+    console.error("Error removing like in post on MongoDB:", err);
+  }
+}
+
 export {
   getAllPosts,
   countAllPosts,
@@ -130,4 +154,6 @@ export {
   deletePost,
   findPostsByUserId,
   countAllPostsByTitle,
+  addLike,
+  removeLike,
 };

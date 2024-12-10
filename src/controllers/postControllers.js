@@ -194,6 +194,23 @@ const remove = async (req, res) => {
   }
 };
 
+const likePost = async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.userId;
+
+  try {
+    const result = await postServices.addLikePost(postId, userId);
+
+    if (!result) {
+      const result = await postServices.removeLikePost(postId, userId);
+      return res.status(200).json({ message: "Like removed successfully" });
+    }
+    return res.status(200).json({ message: "Like added successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 export {
   getPosts,
   getPost,
@@ -202,4 +219,5 @@ export {
   create,
   update,
   remove,
+  likePost,
 };

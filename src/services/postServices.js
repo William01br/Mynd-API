@@ -8,6 +8,8 @@ import {
   countAllPosts,
   findPostsByUserId,
   countAllPostsByTitle,
+  addLike,
+  removeLike,
 } from "../models/Post.js";
 
 const getPosts = async (limit, offset) => await getAllPosts(limit, offset);
@@ -50,8 +52,14 @@ const remove = async (id) => await deletePost(id);
 const actionIsValid = async (postId, userId) => {
   const result = await getPostsByUserId(userId);
 
-  return result.some((post) => post._id === postId);
+  const existence = result.some((post) => post._id.toString() === postId);
+  return existence;
 };
+
+const addLikePost = async (postId, userId) => await addLike(postId, userId);
+
+const removeLikePost = async (postId, userId) =>
+  await removeLike(postId, userId);
 
 export default {
   getPosts,
@@ -63,4 +71,6 @@ export default {
   update,
   remove,
   actionIsValid,
+  addLikePost,
+  removeLikePost,
 };

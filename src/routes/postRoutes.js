@@ -8,6 +8,7 @@ import {
   create,
   update,
   remove,
+  likePost,
 } from "../controllers/postControllers.js";
 import { getAllDataPagination } from "../middlewares/postsPaginationMiddleware.js";
 import { getDataUserPostsPagination } from "../middlewares/userPostsPaginationMiddleware.js";
@@ -17,15 +18,17 @@ const router = express.Router();
 
 router.get("/", getAllDataPagination, getPosts);
 
-router.post("/", authenticateToken, create);
-
 router.get("/user/:author_id", getDataUserPostsPagination, getPostsUser);
 
 router.get("/search", getDataTitlePostsPagination, getPostByTitle);
 
 router.get("/:id", authenticateToken, getPost);
 
+router.post("/", authenticateToken, create);
+
 router.patch("/:id", authenticateToken, update);
+
+router.patch("/like/:id", authenticateToken, likePost);
 
 router.delete("/:id", authenticateToken, remove);
 
