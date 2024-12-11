@@ -2,6 +2,7 @@ import express from "express";
 import authRoutes from "./src/routes/authRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import postRoutes from "./src/routes/postRoutes.js";
+import swaggerRoutes from "./src/routes/swaggerRoutes.js";
 import { notFound } from "./src/middlewares/notFoundMiddleware.js";
 const app = express();
 
@@ -13,9 +14,11 @@ app.set("json spaces", 2);
 
 app.use("/auth", authRoutes);
 
-app.use("/users", userRoutes);
+app.use("/user", userRoutes);
 
 app.use("/posts", postRoutes);
+
+app.use("/doc", swaggerRoutes);
 
 app.use(notFound);
 

@@ -26,16 +26,16 @@ router.get("/search", getDataTitlePostsPagination, getPostByTitle);
 
 router.get("/:id", authenticateToken, getPost);
 
-router.post("/", authenticateToken, create);
+router.post("/create", authenticateToken, create);
 
-router.patch("/comments/:id", authenticateToken, createComment);
+router.patch("/update/:id", authenticateToken, update);
 
-router.patch("/:id", authenticateToken, update);
+router.patch("/:id/comment", authenticateToken, createComment);
 
-router.patch("/like/:id", authenticateToken, likePost);
+router.patch("/:id/like", authenticateToken, likePost);
 
-router.delete("/:id", authenticateToken, remove);
+router.delete("/delete/:id", authenticateToken, remove);
 
-router.delete("/:id/comments/:commentId", authenticateToken, removeComment);
+router.delete("/:id/comment/:commentId", authenticateToken, removeComment);
 
 export default router;

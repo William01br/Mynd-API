@@ -10,7 +10,7 @@ import { credentialsIsValid } from "../middlewares/credentialsMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", getUsers);
+router.get("/", authenticateToken, getUsers);
 
 router.get("/:id", getUser);
 

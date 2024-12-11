@@ -5,10 +5,9 @@ const getPosts = async (req, res) => {
     const { nextUrl, previousUrl, limit, offset } = req.dataPagination;
 
     const result = await postServices.getPosts(limit, offset);
-    // console.log(result);
 
     if (result.length === 0)
-      return res.status(200).json({ message: "There are no Posts" });
+      return res.status(200).json({ message: "No have posts", results: [] });
 
     return res.status(200).json({
       nextUrl: nextUrl,
@@ -33,7 +32,7 @@ const getPosts = async (req, res) => {
 
 const getPost = async (req, res) => {
   const postId = req.params.id;
-  // console.log(postId);
+
   try {
     const result = await postServices.getPost(postId);
     if (!result) return res.status(404).json({ message: "Post not found" });
@@ -65,7 +64,7 @@ const getPostsUser = async (req, res) => {
     if (result.length === 0)
       return res.status(404).json({ message: `This user don't have posts` });
 
-    if (!result) return res.status(404).json({ message: "UserId not found" });
+    if (!result) return res.status(401).json({ message: "UserId not found" });
 
     return res.status(200).json({
       nextUrl: nextUrl,
@@ -94,12 +93,11 @@ const getPostByTitle = async (req, res) => {
 
   try {
     const result = await postServices.getPostByTitle(title, limit, offset);
-    // console.log(result);
 
     if (result.length === 0)
       return res
         .status(200)
-        .json({ message: "There are no Posts with this title" });
+        .json({ message: "No posts found with this title", results: [] });
 
     if (!result) return res.status(404).json({ message: "Post not found" });
 
@@ -128,15 +126,12 @@ const create = async (req, res) => {
   const { title, description } = req.body;
   const id = req.userId;
 
-  if (!id) return res.status(500).json({ error: "Id not found or invalid" });
-
   if (!title || !description)
     return res.status(400).json({ message: "Invalid post" });
 
   try {
     const result = await postServices.create(title, description, id);
-    if (!result) return res.status(500).json({ error: "Error inserting post" });
-    return res.status(201).json({ message: "Post added successfully" });
+    return res.status(201).send({ post: result });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -159,14 +154,11 @@ const update = async (req, res) => {
     const result = await postServices.update(title, description, id);
 
     if (result.matchedCount === 0)
-      return res
-        .status(400)
-        .json({ message: `There are no posts with this title '${id}'` });
+      return res.status(404).json({
+        message: `There are no posts with this id '${id}'`,
+        result: [],
+      });
 
-    if (!result.acknowledged)
-      return res
-        .status(500)
-        .json({ message: "This post could not be updated" });
     return res.status(200).json({ message: "Post updated successfully" });
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -222,7 +214,7 @@ const createComment = async (req, res) => {
   try {
     const result = await postServices.createComment(postId, userId, comment);
 
-    if (!result) return res.status(400).json({ message: "null" });
+    if (!result) return res.status(404).json({ message: "Post Not Found" });
     return res.status(201).json({ message: "Comment added successfully" });
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -242,7 +234,7 @@ const removeComment = async (req, res) => {
         message: "The user don't have permission to remove this comment",
       });
 
-    const result = await postServices.removeComment(postId, commentId);
+    const result = await postServices.removeComment(postId, commentId, userId);
 
     if (result.deletedCount === 0)
       return res.status(400).json({ message: "Comment not found" });

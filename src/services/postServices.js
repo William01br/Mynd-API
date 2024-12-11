@@ -68,8 +68,8 @@ const createComment = async (postId, userId, comment) => {
   return await insertComment(postId, userId, comment, commentId);
 };
 
-const removeComment = async (postId, commentId) =>
-  await deleteComment(postId, commentId);
+const removeComment = async (postId, commentId, userId) =>
+  await deleteComment(postId, commentId, userId);
 
 export default {
   getPosts,

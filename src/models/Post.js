@@ -95,8 +95,7 @@ async function insertPost(title, description, author_id) {
       description,
       author_id,
     });
-    await newPost.save();
-    return { sucess: true };
+    return await newPost.save();
   } catch (err) {
     console.error("Error inserting post in MongoDB:", err);
   }
@@ -162,7 +161,7 @@ async function insertComment(postId, userId, comment, commentId) {
   }
 }
 
-async function deleteComment(postId, commentId) {
+async function deleteComment(postId, commentId, userId) {
   try {
     const result = await Post.findOneAndUpdate(
       {
@@ -170,7 +169,7 @@ async function deleteComment(postId, commentId) {
       },
       {
         $pull: {
-          comments: { commentId },
+          comments: { commentId, userId },
         },
       }
     );

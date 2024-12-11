@@ -3,8 +3,6 @@ import userService from "../services/userService.js";
 const getUsers = async (req, res) => {
   try {
     const users = await userService.showUsers();
-    if (users.length === 0)
-      return res.status(404).json({ message: "There are no users" });
     return res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -16,7 +14,7 @@ const getUser = async (req, res) => {
 
   try {
     const user = await userService.showUser(id);
-    if (!user) return res.status(400).json({ message: "Id not found" });
+    if (!user) return res.status(404).json({ message: "Id not found" });
     return res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -30,8 +28,6 @@ const register = async (req, res) => {
     if (result === 11000)
       return res.status(400).json({ message: "Email already registered" });
 
-    if (!result)
-      return res.status(500).json({ message: "Error inserting user" });
     return res.status(201).json({ message: "Sucessfully added" });
   } catch (err) {
     res
@@ -47,8 +43,10 @@ const remove = async (req, res) => {
     const result = await userService.remove(id);
 
     if (result === 0)
-      return res.status(404).json({ message: "user not removed" });
-    return res.status(200).json({ message: "User successfully removed" });
+      return res
+        .status(404)
+        .json({ message: "User not found or already deleted" });
+    return res.status(200).json({ message: "Sucessfully removed" });
   } catch (err) {
     return res
       .status(500)
