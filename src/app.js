@@ -1,9 +1,9 @@
 import express from "express";
-import authRoutes from "./src/routes/authRoutes.js";
-import userRoutes from "./src/routes/userRoutes.js";
-import postRoutes from "./src/routes/postRoutes.js";
-import swaggerRoutes from "./src/routes/swaggerRoutes.js";
-import { notFound } from "./src/middlewares/notFoundMiddleware.js";
+import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
+import swaggerRoutes from "./routes/swaggerRoutes.js";
+import { notFound } from "./middlewares/notFoundMiddleware.js";
 const app = express();
 
 app.use(express.json());

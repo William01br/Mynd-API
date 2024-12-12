@@ -4,10 +4,12 @@ import { findByCredentials } from "../models/User.js";
 
 const login = async (email, password) => {
   const user = await findByCredentials(email);
+  console.log(user);
 
   if (!user) return null;
 
   const isMatch = await bcrypt.compare(password, user.password);
+  console.log(isMatch);
   if (!isMatch) return null;
 
   // return user without password

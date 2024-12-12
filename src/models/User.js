@@ -50,18 +50,18 @@ async function findByCredentials(email) {
   }
 }
 
-async function insertUser(username, email, password) {
+async function insertUser(name, username, email, password) {
   try {
     const newUser = new User({
+      name,
       username,
       email,
       password,
     });
-    await newUser.save();
-    return { sucess: true };
+    return await newUser.save();
   } catch (err) {
     if (err.code === 11000) return 11000;
-    console.error("Error registering user in DB:", err);
+    return console.error("Error registering user in DB:", err);
   }
 }
 

@@ -14,7 +14,7 @@
       "post": {
         "summary": "Create a new user",
         "description": "This route is used to create a new user",
-        "tags": ["users"],
+        "tags": ["Users"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -24,10 +24,10 @@
               "examples": {
                 "Users": {
                   "value": {
-                    "name": "William Smith",
-                    "username": "William",
-                    "email": "williamsmith123@gmail.com",
-                    "password": "SkY123456"
+                    "name": "William Smith Blade",
+                    "username": "WilliamSm",
+                    "email": "williamsmith12345@gmail.com",
+                    "password": "Pen123456Sky"
                   }
                 }
               }
@@ -36,7 +36,7 @@
         },
         "responses": {
           "400": {
-            "description": "Invalid user data: Email must be unique and valid. Furthermore, the password must contain uppercase letters, lowercase letters, numbers and at least 8 characters"
+            "description": "Invalid User Data"
           },
           "201": {
             "description": "Created",
@@ -146,8 +146,8 @@
               "examples": {
                 "application/json": {
                   "value": {
-                    "email": "williamsmith123@gmail.com",
-                    "password": "SkY123456"
+                    "email": "williamsmith12345@gmail.com",
+                    "password": "Pen123456Sky"
                   }
                 }
               }
@@ -156,14 +156,7 @@
         },
         "responses": {
           "200": {
-            "description": "Ok",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LoginResponse"
-                }
-              }
-            }
+            "description": "Ok"
           },
           "400": {
             "description": "Invalid Data"
@@ -502,7 +495,7 @@
               "examples": {
                 "Comment": {
                   "value": {
-                    "message": "Today was a nice day!"
+                    "comment": "Today was a nice day!"
                   }
                 }
               }
@@ -573,7 +566,7 @@
       }
     },
     "schemas": {
-      "user": {
+      "User": {
         "type": "object",
         "properties": {
           "name": {

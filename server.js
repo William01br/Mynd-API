@@ -1,6 +1,6 @@
-import { app } from "./app.js";
+import { app } from "./src/app.js";
 import dotenv from "dotenv";
-import connect from "./database.js";
+import connect from "./src/database.js";
 dotenv.config();
 
 const initServer = async () => {

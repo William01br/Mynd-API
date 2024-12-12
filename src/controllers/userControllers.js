@@ -26,9 +26,11 @@ const register = async (req, res) => {
     const result = await userService.register(req.credentials);
 
     if (result === 11000)
-      return res.status(400).json({ message: "Email already registered" });
+      return res
+        .status(400)
+        .json({ message: "Email or username already registered" });
 
-    return res.status(201).json({ message: "Sucessfully added" });
+    return res.status(201).json({ message: "Sucessfully added", user: result });
   } catch (err) {
     res
       .status(500)
