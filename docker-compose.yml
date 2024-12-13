@@ -4,13 +4,31 @@ services:
       context: ./backend
     container_name: backend
     ports:
-      - "3000:3000" # Mapear a porta do backend
+      - "3000:3000"
     volumes:
-      - ./backend:/app # Montar o diretório do backend como volume
-      - /app/node_modules # Evitar sobrescrever o node_modules dentro do container
-    # Conectar ao MongoDB
+      - ./backend:/app
+      - /app/node_modules do container
     depends_on:
       - mongo
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://backend:3000
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
     networks:
       - app-network
 
@@ -18,9 +36,9 @@ services:
     image: mongo:latest
     container_name: mongo
     ports:
-      - "27017:27017" # Expor a porta padrão do MongoDB
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db # Persistir dados do MongoDB
+      - mongo-data:/data/db
     networks:
       - app-network
 

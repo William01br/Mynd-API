@@ -4,7 +4,7 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "dev": " ../docker compose start && src/server.js",
+    "dev": "src/server.js",
     "start": "node src/server.js "
   },
   "keywords": [],
