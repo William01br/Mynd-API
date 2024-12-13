@@ -2,7 +2,7 @@ import express from "express";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
-import swaggerRoutes from "./routes/swaggerRoutes.js";
+import swaggerRoutes from "./routes/swaggerRoutes.cjs";
 import { notFound } from "./middlewares/notFoundMiddleware.js";
 const app = express();
 

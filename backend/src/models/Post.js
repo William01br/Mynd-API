@@ -152,7 +152,8 @@ async function insertComment(postId, userId, comment, commentId) {
         $push: {
           comments: { commentId, userId, comment, createdAt: new Date() },
         },
-      }
+      },
+      { new: true }
     );
     console.log(result);
     return result;

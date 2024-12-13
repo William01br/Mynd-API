@@ -215,7 +215,9 @@ const createComment = async (req, res) => {
     const result = await postServices.createComment(postId, userId, comment);
 
     if (!result) return res.status(404).json({ message: "Post Not Found" });
-    return res.status(201).json({ message: "Comment added successfully" });
+    return res
+      .status(201)
+      .json({ message: "Comment added successfully", data: result });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

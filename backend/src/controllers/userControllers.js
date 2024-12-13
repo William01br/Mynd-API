@@ -30,7 +30,18 @@ const register = async (req, res) => {
         .status(400)
         .json({ message: "Email or username already registered" });
 
-    return res.status(201).json({ message: "Sucessfully added", user: result });
+    const { name, username: username, email, _id, createdAt } = result;
+
+    return res.status(201).json({
+      message: "Sucessfully added",
+      User: {
+        name: name,
+        username: username,
+        id: _id,
+        email: email,
+        createdAt: createdAt,
+      },
+    });
   } catch (err) {
     res
       .status(500)

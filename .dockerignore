@@ -1,0 +1,29 @@
+# Ignorar diretórios de dependências
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ignorar arquivos de configuração específicos do ambiente
+.env
+*.env
+
+# Ignorar arquivos e diretórios específicos de controle de versão
+.git/
+.gitignore
+
+# Ignorar diretórios específicos de IDE
+.vscode/
+.idea/
+
+# Ignorar arquivos de build ou logs
+dist/
+build/
+logs/
+tmp/
+
+# Ignorar arquivos de cache
+.cache/
+
+# Outros arquivos que você não quer incluir na imagem
+Dockerfile*
+docker-compose.yml
