@@ -8,7 +8,6 @@ export const login = async (req, res) => {
 
   try {
     const user = await authServices.login(email, password);
-    console.log(user);
 
     if (!user)
       return res.status(400).json({ message: "Email or Password wrong" });

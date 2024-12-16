@@ -1,9 +1,9 @@
 import { isEmailValid, isPasswordValid } from "../utils/credentials.js";
 
 export const credentialsIsValid = (req, res, next) => {
-  const { name, username, email, password } = req.body;
+  const { name, username, email, password, avatar, background } = req.body;
 
-  if (!name || !username || !email || !password)
+  if (!name || !username || !email || !password || !avatar || !background)
     return res.status(400).json({ message: "All fields must be filled in" });
 
   if (!isEmailValid(email))
@@ -14,6 +14,6 @@ export const credentialsIsValid = (req, res, next) => {
         "password must contain uppercase letters, lowercase letters, numbers and at least 8 characters ",
     });
 
-  req.credentials = { name, username, email, password };
+  req.credentials = { name, username, email, password, avatar, background };
   next();
 };

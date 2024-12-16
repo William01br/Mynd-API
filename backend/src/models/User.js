@@ -7,12 +7,14 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true, select: false },
+    avatar: { type: String, required: true },
+    background: { type: String, required: true },
   },
   { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
-  this.password = await bcrypt.hash(this.password, 10);
+userSchema.pre("save", function (next) {
+  this.password = bcrypt.hash(this.password, 10);
   next();
 });
 
@@ -50,13 +52,15 @@ async function findByCredentials(email) {
   }
 }
 
-async function insertUser(name, username, email, password) {
+async function insertUser(name, username, email, password, avatar, background) {
   try {
     const newUser = new User({
       name,
       username,
       email,
       password,
+      avatar,
+      background,
     });
     return await newUser.save();
   } catch (err) {
@@ -65,13 +69,30 @@ async function insertUser(name, username, email, password) {
   }
 }
 
+async function updateUser(id, data) {
+  try {
+    const update = await User.updateOne({ _id: id }, { $set: data });
+    return update;
+  } catch (err) {
+    console.error("Error updating user in DB:", err);
+  }
+}
+
 async function removeUser(id) {
   try {
-    const user = await User.deleteOne({ _id: ObjectId(id) });
+    const user = await User.deleteOne({ _id: id });
+    console.log(user.deletedCount);
     return user.deletedCount;
   } catch (err) {
     console.error("Error removing user from DB:", err);
   }
 }
 
-export { findByCredentials, findAllUsers, findById, insertUser, removeUser };
+export {
+  findByCredentials,
+  findAllUsers,
+  findById,
+  insertUser,
+  removeUser,
+  updateUser,
+};

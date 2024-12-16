@@ -27,7 +27,9 @@
                     "name": "William Smith Blade",
                     "username": "WilliamSm",
                     "email": "williamsmith12345@gmail.com",
-                    "password": "Pen123456Sky"
+                    "password": "Pen123456Sky",
+                    "avatar": "https://example.com/images/avatar.jpg",
+                    "background": "https://example.com/images/background.jpg"
                   }
                 }
               }
@@ -78,7 +80,7 @@
         }
       }
     },
-    "user/{id}": {
+    "/user/{id}": {
       "get": {
         "summary": "Search user by id",
         "description": "Route responsible for searching for user by id",
@@ -113,7 +115,33 @@
         }
       }
     },
-    "user/remove": {
+    "/user/update": {
+      "patch": {
+        "summary": "Update user by id",
+        "description": "Route responsible for updating user by id",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "Users": {
+                  "value": {
+                    "username": "WilliamSmUpdated",
+                    "avatar": "https://example.com/images/avatarUpdated.jpg",
+                    "background": "https://example.com/images/backgroundUpdated.jpg"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/remove": {
       "delete": {
         "summary": "Delete user by id",
         "description": "Route responsible for deleting user by id",
@@ -122,6 +150,9 @@
         "responses": {
           "200": {
             "description": "Ok"
+          },
+          "400": {
+            "description": "Invalid Data"
           },
           "401": {
             "description": "Acess Denied"

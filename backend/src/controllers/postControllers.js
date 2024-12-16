@@ -143,6 +143,11 @@ const update = async (req, res) => {
   const { title, description } = req.body;
   const userId = req.userId;
 
+  if (!title && !description)
+    return res
+      .status(400)
+      .json({ message: "At least one field must be updated" });
+
   try {
     const actionIsValid = await postServices.actionIsValid(id, userId);
 
