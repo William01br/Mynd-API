@@ -2,7 +2,7 @@ import userService from "../services/userService.js";
 
 const getUsers = async (req, res) => {
   try {
-    const users = await userService.showUsers();
+    const users = await userService.findAllUsers();
     return res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -13,7 +13,7 @@ const getUser = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const user = await userService.showUser(id);
+    const user = await userService.findById(id);
     if (!user) return res.status(404).json({ message: "Id not found" });
     return res.status(200).json(user);
   } catch (err) {

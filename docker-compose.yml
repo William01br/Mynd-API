@@ -13,25 +13,6 @@ services:
     networks:
       - app-network
 
-  frontend:
-    build:
-      context: ./frontend
-    container_name: frontend
-    ports:
-      - "3001:3000"
-    volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
-      - /app/node_modules
-    environment:
-      - VITE_API_URL=http://backend:3000
-    depends_on:
-      - backend
-    stdin_open: true
-    tty: true
-    networks:
-      - app-network
-
   mongo:
     image: mongo:latest
     container_name: mongo
