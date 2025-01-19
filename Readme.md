@@ -20,11 +20,11 @@ This API focused on core features—allowing users to create posts, comment on t
 
 - Clone the repository:
 
-`git clone https://github.com/williambr01/Mynd-API.git`
+`git clone git@github.com:William01br/Mynd-API.git`
 
 - Navigate to the project directory:
 
-`cd /backend`
+`cd Mynd-API/backend`
 
 - Set up environment variables:
 
