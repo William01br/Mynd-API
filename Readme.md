@@ -1,4 +1,4 @@
-# API-Mynd
+# Mynd-API
 
 API for backend that provides features such as creating posts, creating comments and likes on posts. The aim of the project was to gain experience.
 
