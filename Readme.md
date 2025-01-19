@@ -38,7 +38,7 @@ Docker Compose is the tool that enables the application to run. Both NodeJS and 
 
 So, you need Docker installed on your machine. If you don't have it installed, you can install it here:
 
-`https://docs.docker.com/get-started/get-docker/`
+https://docs.docker.com/get-started/get-docker/
 
 ---
 
