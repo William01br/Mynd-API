@@ -22,11 +22,7 @@ This API focused on core features—allowing users to create posts, comment on t
 
 `git clone git@github.com:William01br/Mynd-API.git`
 
-- Navigate to the project directory:
-
-`cd Mynd-API/backend`
-
-- Set up environment variables:
+- Navigate to the directory `Mynd-API/backend` and set up environment variables:
 
   - create a `.env` file based on `.env.example`
 
