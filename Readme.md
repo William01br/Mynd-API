@@ -77,6 +77,7 @@ But all endpoints are documented in the file "swagger.json" and you can interact
 A short explanation of the purposes of the project's directories.
 
 - **Routes** → Defines the endpoints.
+- **middleware** → they intercept the routes and resolve some dependencies such as paging and session authentication.
 - **Controllers** → Perform basic validations, and the main purpose is to control HTTP responses.
 - **Services** → Responsible for data encryption, complex logic, token creation, and interaction with the database.
 - **Utils** → Contains files that solve specific problems.
