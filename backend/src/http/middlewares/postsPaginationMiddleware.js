@@ -1,15 +1,15 @@
-import postServices from "../services/postServices.js";
-import { sliceString } from "../utils/sliceUtils.js";
+import postServices from '../../use-cases/services/postServices.js';
+import { sliceString } from '../../shared/utils/sliceUtils.js';
 
-export const getDataUserPostsPagination = async (req, res, next) => {
+export const getAllDataPagination = async (req, res, next) => {
   let { limit, offset } = req.query;
 
   limit = Number(limit) || 5;
   offset = Number(offset) || 0;
-  const user_id = req.params.author_id;
 
   try {
-    const amount = await postServices.countPosts({ author_id: user_id });
+    const amount = await postServices.countPosts({});
+
     const currentUrl = sliceString(req.originalUrl);
 
     const nextTotal = limit + offset;
@@ -29,7 +29,6 @@ export const getDataUserPostsPagination = async (req, res, next) => {
       previousUrl: previousUrl,
       limit: limit,
       offset: offset,
-      user_id: user_id,
     };
     next();
   } catch (err) {

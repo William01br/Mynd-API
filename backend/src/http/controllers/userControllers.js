@@ -1,4 +1,4 @@
-import userService from "../services/userService.js";
+import userService from '../../use-cases/services/userService.js';
 
 const getUsers = async (req, res) => {
   try {
@@ -14,7 +14,7 @@ const getUser = async (req, res) => {
 
   try {
     const user = await userService.findById(id);
-    if (!user) return res.status(404).json({ message: "Id not found" });
+    if (!user) return res.status(404).json({ message: 'Id not found' });
     return res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -28,10 +28,10 @@ const register = async (req, res) => {
     if (result === 11000)
       return res
         .status(400)
-        .json({ message: "Email or username already registered" });
+        .json({ message: 'Email or username already registered' });
 
     return res.status(201).json({
-      message: "Sucessfully added",
+      message: 'Sucessfully added',
       User: {
         id: result._id,
         name: result.name,
@@ -45,7 +45,7 @@ const register = async (req, res) => {
   } catch (err) {
     res
       .status(500)
-      .json({ error: err.message, message: "Error registering user" });
+      .json({ error: err.message, message: 'Error registering user' });
   }
 };
 
@@ -56,18 +56,18 @@ const update = async (req, res) => {
   if (!username && !avatar && !background)
     return res
       .status(400)
-      .json({ message: "At least one field must be updated" });
+      .json({ message: 'At least one field must be updated' });
 
   try {
     const result = await userService.update(id, username, avatar, background);
 
-    if (!result) return res.status(404).json({ message: "User not found" });
+    if (!result) return res.status(404).json({ message: 'User not found' });
 
-    return res.status(200).json({ message: "User updated successfully" });
+    return res.status(200).json({ message: 'User updated successfully' });
   } catch (err) {
     return res
       .status(500)
-      .json({ message: "Error updating user", error: err.message });
+      .json({ message: 'Error updating user', error: err.message });
   }
 };
 
@@ -78,12 +78,12 @@ const remove = async (req, res) => {
     const result = await userService.remove(id);
 
     if (result === 0)
-      return res.status(404).json({ message: "User not found" });
-    return res.status(200).json({ message: "Sucessfully removed" });
+      return res.status(404).json({ message: 'User not found' });
+    return res.status(200).json({ message: 'Sucessfully removed' });
   } catch (err) {
     return res
       .status(500)
-      .json({ message: "Error removing user", error: err.message });
+      .json({ message: 'Error removing user', error: err.message });
   }
 };
 
