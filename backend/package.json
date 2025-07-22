@@ -13,6 +13,7 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.31.0",
+    "@types/module-alias": "^2.0.4",
     "@types/node": "^24.1.0",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.8",
@@ -33,6 +34,7 @@
     "express": "^4.21.1",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.1",
     "swagger-ui-express": "^5.0.1"
