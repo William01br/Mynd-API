@@ -5,9 +5,8 @@ WORKDIR /app
 ENV NODE_ENV=development
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # code will come from bind-mount 
-
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start:dev"]
