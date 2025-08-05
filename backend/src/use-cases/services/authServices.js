@@ -1,10 +1,10 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import User from "../models/User.js";
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import User from '../../infra/mongo/models/User.js';
 const login = async (email, password) => {
   try {
     const emailLower = email.toLowerCase();
-    const user = await User.findOne({ email: emailLower }).select("+password");
+    const user = await User.findOne({ email: emailLower }).select('+password');
     console.log(user);
 
     if (!user) return null;
@@ -19,12 +19,12 @@ const login = async (email, password) => {
 
     return userData;
   } catch (err) {
-    console.error("Error finding user by credentials in DB:", err);
+    console.error('Error finding user by credentials in DB:', err);
   }
 };
 const generateToken = (id) => {
   const token = jwt.sign({ userId: id }, process.env.SECRET_KEY, {
-    expiresIn: "12h",
+    expiresIn: '12h',
   });
   return token;
 };

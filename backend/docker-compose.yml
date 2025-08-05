@@ -1,12 +1,15 @@
 services:
   backend:
     build:
-      context: ./backend
+      context: ./
+      dockerfile: Dockerfile
     container_name: backend
+    environment:
+      - NODE_ENV=development
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
-      - ./backend:/app
+      - .:/app
       - /app/node_modules
     depends_on:
       - mongo
@@ -14,10 +17,13 @@ services:
       - app-network
 
   mongo:
-    image: mongo:latest
+    image: mongo:8.0-noble
     container_name: mongo
     ports:
-      - "27017:27017"
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
       - mongo-data:/data/db
     networks:

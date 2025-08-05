@@ -1,29 +1,27 @@
-import postServices from "../services/postServices.js";
-import { sliceString } from "../utils/sliceUtils.js";
+import postServices from '../../use-cases/services/postServices.js';
+import { sliceString } from '../../shared/utils/sliceUtils.js';
 
-export const getDataTitlePostsPagination = async (req, res, next) => {
-  let { limit, offset, title } = req.query;
+export const getDataUserPostsPagination = async (req, res, next) => {
+  let { limit, offset } = req.query;
 
   limit = Number(limit) || 5;
   offset = Number(offset) || 0;
-  title = title || "";
+  const user_id = req.params.author_id;
 
   try {
-    const amount = await postServices.countPosts({ title: title });
-    console.log(amount);
-
+    const amount = await postServices.countPosts({ author_id: user_id });
     const currentUrl = sliceString(req.originalUrl);
 
     const nextTotal = limit + offset;
     const nextUrl =
       nextTotal < amount
-        ? `${currentUrl}?title=${title}&limit=${limit}&offset=${nextTotal}`
+        ? `${currentUrl}?limit=${limit}&offset=${nextTotal}`
         : null;
 
     const previous = offset - limit < 0 ? null : offset - limit;
     const previousUrl =
       previous !== null
-        ? `${currentUrl}?title=${title}&limit=${limit}&offset=${previous}`
+        ? `${currentUrl}?limit=${limit}&offset=${previous}`
         : null;
 
     req.dataPagination = {
@@ -31,7 +29,7 @@ export const getDataTitlePostsPagination = async (req, res, next) => {
       previousUrl: previousUrl,
       limit: limit,
       offset: offset,
-      title: title,
+      user_id: user_id,
     };
     next();
   } catch (err) {
