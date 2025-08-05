@@ -2,10 +2,15 @@
   "name": "mynd",
   "version": "1.0.0",
   "main": "src/server.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js "
+    "build": "npx tsc",
+    "start": "tsc && node dist/server.js",
+    "start:dev": "ts-node-dev --watch \"src/*.ts\" src/server.ts",
+    "format": "prettier --check \"*.ts\"",
+    "format:write": "prettier --write \"*.ts\"",
+    "lint": "eslint \"*.ts\"",
+    "lint:fix": "eslint \"*.ts\" --fix"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +18,7 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.31.0",
+    "@types/express": "^5.0.3",
     "@types/module-alias": "^2.0.4",
     "@types/node": "^24.1.0",
     "eslint": "^9.31.0",
@@ -31,7 +37,7 @@
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
-    "express": "^4.21.1",
+    "express": "^5.1.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "module-alias": "^2.2.3",
