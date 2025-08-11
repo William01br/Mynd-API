@@ -33,6 +33,7 @@
     "typescript-eslint": "^8.38.0"
   },
   "dependencies": {
+    "@prisma/client": "^6.13.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
@@ -43,6 +44,7 @@
     "module-alias": "^2.2.3",
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.1",
+    "prisma": "^6.13.0",
     "swagger-ui-express": "^5.0.1"
   }
 }
