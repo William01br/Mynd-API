@@ -1,5 +1,5 @@
 # === STAGE: development ===
-FROM node:22.17-alpine3.22
+FROM node:22-alpine3.22
 
 WORKDIR /app
 ENV NODE_ENV=development

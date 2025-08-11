@@ -13,6 +13,7 @@ services:
       - /app/node_modules
     depends_on:
       - mongo
+      - postgres
     networks:
       - app-network
 
@@ -29,10 +30,27 @@ services:
     networks:
       - app-network
 
+  postgres:
+    image: postgres:17-alpine3.21
+    container_name: pg
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    volumes:
+      - db_dev_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   mongo-data:
+    driver: local
+  db_dev_data:
     driver: local
