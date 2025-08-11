@@ -1,0 +1,62 @@
+datasource db {
+    provider = "postgresql"
+    url = env("POSTGRES_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    id Int @id @default(autoincrement())
+    name String @unique
+    createdAt DateTime @default(now())
+    email String @unique
+
+    posts Post[]
+    comments Comment[]
+    likes Like[]
+}
+
+model Post {
+    id Int @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    title String @db.VarChar(255)
+    body String? 
+    authorId Int
+    author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+    comments Comment[]
+    likes Like[]
+}
+
+model Comment {
+    id Int @id @default(autoincrement())
+    content String
+    createdAt DateTime @default(now())
+    authorId Int
+    postId Int
+    author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    post Post @relation(fields: [id], references: [id], onDelete: Cascade)
+
+    likes Like[]
+}
+
+model Like {
+    id Int @id @default(autoincrement())
+    userId Int
+    postId Int?
+    commentId Int?
+    createdAt DateTime @default(now())
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+    comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+    @@index([postId])
+    @@index([commentId])
+    // Prevent duplicate likes by the same user on same target:
+    @@unique([userId, postId], name: "unique_user_post_like")
+    @@unique([userId, commentId], name: "unique_user_comment_like")
+}
